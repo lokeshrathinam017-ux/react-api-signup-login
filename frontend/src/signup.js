@@ -60,7 +60,7 @@ const Signup = () =>
             return
         }
 
-        axios.post("http://localhost:5000/signup", { username: user, email: email, password: pass })
+        axios.post("https://react-api-signup-login.vercel.app/signup", { username: user, email: email, password: pass })
             .then(function(data)
             {
                 if(data.data === true)
