@@ -14,6 +14,7 @@ const RootApp = () => {
             <Navbar />
             <Routes>
                 <Route path="/" element={<App setLoggedUser={setLoggedUser} />} />
+                <Route path="/login" element={<App setLoggedUser={setLoggedUser} />} />
                 <Route path="/success" element={<Success username={loggedUser} />} />
                 <Route path="/signup" element={<Signup />} />
             </Routes>
