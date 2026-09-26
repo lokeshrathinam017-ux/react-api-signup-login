@@ -1,48 +1,34 @@
-const express = require('express')
-const cors = require('cors')
+const express = require("express");
+const cors = require("cors");
+const app = express();
 
-const app = express()
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
 
-const users = [
-    { username: "Loki", email: "loki@gmail.com", password: "123" }
-]
+const users = [];
 
-app.post("/login", function(req, res)
-{
-    let userfound = false
-    let loggeduser = ""
+app.post("/signup", (req, res) => {
+  const { username, email, password } = req.body;
+  if (!username || !email || !password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+  users.push({ username, email, password });
+  return res.json({ success: true, message: "User created successfully" });
+});
 
-    for(let i = 0; i < users.length; i++)
-    {
-        if(users[i].username === req.body.username && users[i].email === req.body.email && users[i].password === req.body.password)
-        {
-            userfound = true
-            loggeduser = users[i].username
-        }
-    }
+app.post("/login", (req, res) => {
+  const { username, email, password } = req.body;
+  const foundUser = users.find(
+    (u) => u.username === username && u.password === password
+  );
 
-    if(userfound)
-    {
-        res.send({ success: true, username: loggeduser })
-    }
-    else {
-        res.send({ success: false, message: "Invalid email or password" })
-    }
-})
+  if (foundUser) {
+    return res.json({ success: true, username: foundUser.username });
+  }
+  return res.json({ success: false, message: "Invalid credentials" });
+});
 
-app.post("/signup", function(req, res)
-{
-    const username = req.body.username
-    const email = req.body.email
-    const password = req.body.password
-
-    users.push({ username, email, password })
-    res.send(true)
-})
-
-app.listen(5000, function()
-{
-    console.log("Server Started..")
-})
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
